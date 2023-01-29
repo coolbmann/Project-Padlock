@@ -9,6 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/general.css">
   <link rel="stylesheet" href="styles/password-output.css">
+  <link rel="stylesheet" href="styles/password-settings.css">
+
+  <script src="/Project-Padlock/scripts/app.js"></script>
 </head>
 <body>
   <h1 id="body_title">Padlock</h1>
@@ -28,6 +31,71 @@
           </svg>
       </button>
     </div>
+  </div>
+
+  <div id="settings_section-box">
+    <div id="settings_character-length-header">
+      <div class="settings_character-length-header-subsection">
+        <p id="settings_character-length-text" class="settings_text">Character Length</p>
+      </div>
+      <div class="settings_character-length-header-subsection">
+        <p id="settings_character-length-value">0</p>
+      </div>
+    </div>
+
+    <div id="settings_slider-box">
+      <input id="settings_slider" type="range" min="0" max="18" value="0">
+    </div>
+
+    <div id="settings_checkbox-section">
+      <div class="settings_checkbox-section-row settings_text">
+        <label>Include Uppercase Letters
+          <input class="settings_checkbox" type="checkbox" checked="checked">
+          <span></span>
+        </label>
+      </div>
+
+      <div class="settings_checkbox-section-row settings_text">
+        <label>Include Lowercase Letters
+          <input class="settings_checkbox" type="checkbox">
+          <span></span>
+        </label>
+      </div>
+
+      <div class="settings_checkbox-section-row settings_text">
+        <label>Include Numbers
+          <input class="settings_checkbox" type="checkbox">
+          <span></span>
+        </label>
+      </div>
+
+      <div class="settings_checkbox-section-row settings_text">
+        <label>Include Symbols
+          <input class="settings_checkbox" type="checkbox">
+          <span></span>
+        </label>
+      </div>
+
+      <div id="settings_common-expression-row" class="settings_checkbox-section-row settings_text">
+        <label>Include Common Expressions
+          <input class="settings_checkbox" type="checkbox">
+          <span></span>
+        </label>
+      </div>
+    </div>
+
+    <div id="settings_strength-section">
+      <div>Strength 
+      </div>
+      <div>
+        <div>MEDIUM</div>
+        <svg></svg>
+        <svg></svg>
+        <svg></svg>
+        <svg></svg>
+      </div>
+    </div>
+
   </div>
 
 
