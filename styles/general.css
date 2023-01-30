@@ -1,9 +1,10 @@
 body {
   background-color: #131218;
   font-family: 'Space Mono', monospace;
+  color: #e2dfdf;
 }
 
 #body_title {
   text-align: center;
-  color: rgb(116, 114, 114);
+  color: rgb(129, 126, 126);
 }
