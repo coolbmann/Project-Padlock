@@ -124,24 +124,67 @@ window.addEventListener('DOMContentLoaded', () => {
   const generatePassword = () => {
     const passwordLength = slider.value;
 
+    // Initialise password and possible character arrays
     const randomCharacterArray = setCharacterArray();
     const generatedPasswordArray = [];
-    // Run function to check options and create randomised array
 
+    // Push random elements into array
     for (i=0; i < passwordLength; i++) {
       let randomElement = Math.floor(Math.random()*randomCharacterArray.length);
       generatedPasswordArray.push(randomCharacterArray[randomElement]);
     }
 
+    // Convert password array to string
     const passwordString = generatedPasswordArray.join("");
 
-    // For loop to pass in a value in array of specified length
-    displayPassword(passwordString);
-
+    // Check if password includes at least one of each selection, else try again
+    if (checkPassword(passwordString)) {
+      displayPassword(passwordString);
+    }
+    else {
+      generatePassword();
+    }
   }
 
+  const checkPassword = (password) => { 
+    // Check how many options are selected
+    const optionsSelected = Object.values(checkSelectedOptions()).reduce((a, item) => a + item, 0)
+    
+    // Only apply logic if length is >= number of true options ex.regexp
+    if (optionsSelected > slider.value) {
+      return true;
+    }
+    
+    // Check that at least 1 item from respective array is included in string if option selected
+    const selectedOptions = checkSelectedOptions();
+    const passString = (character) => {return password.includes(character)};
 
+    if (selectedOptions.uppercase) {
+      if (!uppercaseCharacters.some(passString)) {
+        return false;
+      }   
+    }
 
+    if (selectedOptions.lowercase) {
+      if (!lowercaseCharacters.some(passString)) {
+        return false;
+      }   
+    }
+
+    if (selectedOptions.numbers) {
+      if (!numbers.some(passString)) {
+        return false;
+      }   
+    }
+
+    if (selectedOptions.symbols) {
+      if (!symbols.some(passString)) {
+        return false;
+      }   
+    }
+
+    return true;
+  }
 
   slider.addEventListener('input', (event) => {
     characterLengthDisplay.innerText = event.target.value;
@@ -151,5 +194,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setCheckboxListeners();
   setButtonState();
+  // Show initial character length value
+  characterLengthDisplay.innerText = slider.value;
 
 });
