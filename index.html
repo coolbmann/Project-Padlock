@@ -44,41 +44,41 @@
     </div>
 
     <div id="settings_slider-box">
-      <input id="settings_slider" type="range" min="0" max="18" value="0">
+      <input id="settings_slider" type="range" min="0" max="18" value="12">
     </div>
 
     <div id="settings_checkbox-section">
       <div class="settings_checkbox-section-row settings_text">
         <label>Include Uppercase Letters
-          <input class="settings_checkbox" type="checkbox" checked="checked">
+          <input id="uppercase-option" class="settings_checkbox" type="checkbox" checked="checked">
           <span></span>
         </label>
       </div>
 
       <div class="settings_checkbox-section-row settings_text">
         <label>Include Lowercase Letters
-          <input class="settings_checkbox" type="checkbox">
+          <input id="lowercase-option" class="settings_checkbox" type="checkbox">
           <span></span>
         </label>
       </div>
 
       <div class="settings_checkbox-section-row settings_text">
         <label>Include Numbers
-          <input class="settings_checkbox" type="checkbox">
+          <input id="numbers-option" class="settings_checkbox" type="checkbox">
           <span></span>
         </label>
       </div>
 
       <div class="settings_checkbox-section-row settings_text">
         <label>Include Symbols
-          <input class="settings_checkbox" type="checkbox">
+          <input id="symbols-option" class="settings_checkbox" type="checkbox">
           <span></span>
         </label>
       </div>
 
       <div id="settings_common-expression-row" class="settings_checkbox-section-row settings_text">
         <label>Include Common Expressions
-          <input class="settings_checkbox" type="checkbox">
+          <input id="regular-expressions-option" class="settings_checkbox" type="checkbox">
           <span></span>
         </label>
       </div>
@@ -106,7 +106,9 @@
 
     <button id="action_button" class="action_button_enabled">
       <div id="action_text">GENERATE</div>
-      <!-- <svg id="action_icon"></svg> -->
+      <svg id="action_button-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 15">
+        <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+      </svg>
     </button>
 
   </div>
