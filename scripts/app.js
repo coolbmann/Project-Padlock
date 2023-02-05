@@ -14,7 +14,11 @@ window.addEventListener('DOMContentLoaded', () => {
     const checkboxes = document.querySelectorAll('.settings_checkbox');
 
     for (i=0; i < checkboxes.length; i++) {
-      checkboxes[i].addEventListener('click', setButtonState);
+      checkboxes[i].addEventListener('click', () => {
+        setButtonState();
+        setExpressionsOption()
+      }
+      );
     }
   }
 
@@ -57,7 +61,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const setButtonState = () => {
     const selectedOptions = Object.values(checkSelectedOptions()).includes(true);
     
-    if (selectedOptions) {
+    if (selectedOptions && slider.value > 0) {
       generateButton.className = "action_button_enabled";
       generateButton.disabled = false;
     }
@@ -126,7 +130,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Initialise password and possible character arrays
     const randomCharacterArray = setCharacterArray();
-    const generatedPasswordArray = [];
+    var generatedPasswordArray = [];
 
     // Push random elements into array
     for (i=0; i < passwordLength; i++) {
@@ -186,14 +190,35 @@ window.addEventListener('DOMContentLoaded', () => {
     return true;
   }
 
+  const setExpressionsOption = () => {
+  const selectedOptions = checkSelectedOptions();
+
+    if (selectedOptions.uppercase || selectedOptions.lowercase) {
+      if (slider.value >= 6) {
+        regularExpressionsCheckbox.disabled = false;
+      }
+      else {
+        regularExpressionsCheckbox.disabled = true
+        regularExpressionsCheckbox.checked = false;
+      }
+    }
+    else {
+      regularExpressionsCheckbox.disabled = true
+      regularExpressionsCheckbox.checked = false;
+    }
+  }
+
   slider.addEventListener('input', (event) => {
     characterLengthDisplay.innerText = event.target.value;
+    setExpressionsOption();
+    setButtonState();
   });
 
   generateButton.addEventListener('click', generatePassword);
 
   setCheckboxListeners();
   setButtonState();
+  setExpressionsOption();
   // Show initial character length value
   characterLengthDisplay.innerText = slider.value;
 
