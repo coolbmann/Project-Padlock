@@ -131,6 +131,12 @@ window.addEventListener('DOMContentLoaded', () => {
     // Initialise password and possible character arrays
     const randomCharacterArray = setCharacterArray();
     var generatedPasswordArray = [];
+    
+    if (checkSelectedOptions().expressions) {
+      generatedPasswordArray = pushRegularExpressions();
+      console.log(generatedPasswordArray);
+      return
+    }
 
     // Push random elements into array
     for (i=0; i < passwordLength; i++) {
@@ -206,6 +212,58 @@ window.addEventListener('DOMContentLoaded', () => {
       regularExpressionsCheckbox.disabled = true
       regularExpressionsCheckbox.checked = false;
     }
+  }
+
+  const pushRegularExpressions = () => {
+    const passwordLength = parseInt(slider.value);
+    const tempPasswordArray = [];
+    var firstExpression, secondExpression;
+
+    
+
+    switch (true) {
+      case ((passwordLength >= 17)):
+
+        console.log('test1');
+
+        if (Math.floor(Math.random()*2) == 0) {
+          // Randomly select either 1st expression to be 5 or 6 letter word
+          firstExpression = [...'sixlet']; //insert filter to pull word from model 
+          secondExpression = [...'fivel'];
+
+        }
+        else {
+          firstExpression = [...'fivel']; //insert filter to pull word from model 
+          secondExpression = [...'sixlet'];
+        }
+
+
+        let firstStartPosition = Math.floor(Math.random()*7);
+
+        for (character of firstExpression) {
+          let arrayPosition = firstStartPosition + firstExpression.indexOf(character); 
+          tempPasswordArray[arrayPosition] = character;
+        }
+
+        let secondStartPositionMin = firstStartPosition + firstExpression.length;
+        let secondStartPositionMax = passwordLength - secondExpression.length;
+
+        let secondStartPosition = Math.floor(Math.random()*(secondStartPositionMax - secondStartPositionMin + 1) + secondStartPositionMin);
+
+        for (character of secondExpression) {
+          let arrayPosition = secondStartPosition + secondExpression.indexOf(character);
+          tempPasswordArray[arrayPosition] = character;
+        }
+        
+        
+        
+        break;
+    
+      default:
+        break;
+    }
+
+    return tempPasswordArray;
   }
 
   slider.addEventListener('input', (event) => {
