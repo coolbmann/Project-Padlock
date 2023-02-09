@@ -27,8 +27,12 @@ window.addEventListener('DOMContentLoaded', () => {
   const lowercaseCharacters = [...'abcdefghijklmnopqrstuvwxyz']
   const numbers = [...'0123456789']
   const symbols = [...'!@#$%^&*']
-  const selectedArrayCharacters = [...uppercaseCharacters, ...lowercaseCharacters, ...numbers, ...symbols];
+  // const selectedArrayCharacters = [...uppercaseCharacters, ...lowercaseCharacters, ...numbers, ...symbols];
 
+  const fourLetterWords = ['Bake', 'Word', 'List', 'Four', 'Five', 'Nine', 'Good', 'Best', 'Cute', 'Zero',	'Huge', 'Cool', 'Tree', 'Race', 'Rice', 'Keep',	'Lace', 'Beam', 'Game', 'Mars', 'Tide', 'Ride', 'Hide', 'Exit', 'Hope', 'Cold', 'From', 'Need',	'Stay', 'Come'];
+  const fiveLetterWords = ['clock', 'block' ,'beach', 'award', 'judge' ,'clean' ,'fresh', 'front' ,'round', 'slash' ,'chook' ,'brine' ,'basic', 'floor', 'glass' ,'entry', 'drama' ,'cycle'];
+  const sixLetterWords = ['course', 'school', 'labour', 'street', 'nature', 'figure', 'doctor' ,'season', 'summer' ,'region', 'degree' ,'profit' ,'flight', 'palace' ,'driver', 'branch', 'volume', 'studio', 'butter', 'talent']
+  const defaultWordList = [...fourLetterWords, ...fiveLetterWords, ...sixLetterWords];
 
   const setCharacterArray = () => {
     const selectedArrayCharacters = []
@@ -134,14 +138,17 @@ window.addEventListener('DOMContentLoaded', () => {
     
     if (checkSelectedOptions().expressions) {
       generatedPasswordArray = pushRegularExpressions();
-      console.log(generatedPasswordArray);
-      return
     }
 
     // Push random elements into array
     for (i=0; i < passwordLength; i++) {
       let randomElement = Math.floor(Math.random()*randomCharacterArray.length);
-      generatedPasswordArray.push(randomCharacterArray[randomElement]);
+      if(generatedPasswordArray[i] == null) {
+        generatedPasswordArray[i] = randomCharacterArray[randomElement];
+      }
+      else {
+        continue;
+      }
     }
 
     // Convert password array to string
@@ -215,54 +222,142 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   const pushRegularExpressions = () => {
+    const selectedOptions = checkSelectedOptions();
     const passwordLength = parseInt(slider.value);
     const tempPasswordArray = [];
     var firstExpression, secondExpression;
+    let firstStartPosition;
+    let secondStartPositionMin;
+    let secondStartPositionMax;
+    let secondStartPosition;
 
-    
+    const addCaseToWords = (string) => {
+      if (selectedOptions.uppercase && selectedOptions.lowercase) {
+        string = string[0].toUpperCase() + string.substring(1);
+      }
+      else if (selectedOptions.uppercase) {
+        string = string.toUpperCase();
+      }
+      else if (selectedOptions.lowercase){
+        string = string.toLowerCase();
+      }
+
+      return string;
+    }
+
+    const selectRandomWord = (wordLength) => {
+      let wordArray = defaultWordList.filter((e) => e.length === wordLength);
+      let chosenWord = wordArray[Math.floor(Math.random()*wordArray.length)];
+      console.log(chosenWord);
+      return chosenWord;
+    }
 
     switch (true) {
       case ((passwordLength >= 17)):
 
-        console.log('test1');
-
         if (Math.floor(Math.random()*2) == 0) {
           // Randomly select either 1st expression to be 5 or 6 letter word
-          firstExpression = [...'sixlet']; //insert filter to pull word from model 
-          secondExpression = [...'fivel'];
-
+          firstExpression = [...addCaseToWords(selectRandomWord(6))]; //insert filter to pull word from model 
+          secondExpression = [...addCaseToWords(selectRandomWord(5))];
         }
         else {
-          firstExpression = [...'fivel']; //insert filter to pull word from model 
-          secondExpression = [...'sixlet'];
+          firstExpression = [...addCaseToWords(selectRandomWord(5))]; //insert filter to pull word from model 
+          secondExpression = [...addCaseToWords(selectRandomWord(6))];
         }
 
-
-        let firstStartPosition = Math.floor(Math.random()*7);
+        firstStartPosition = Math.floor(Math.random()*7);
 
         for (character of firstExpression) {
           let arrayPosition = firstStartPosition + firstExpression.indexOf(character); 
           tempPasswordArray[arrayPosition] = character;
         }
 
-        let secondStartPositionMin = firstStartPosition + firstExpression.length;
-        let secondStartPositionMax = passwordLength - secondExpression.length;
+        secondStartPositionMin = firstStartPosition + firstExpression.length;
+        secondStartPositionMax = passwordLength - secondExpression.length;
 
-        let secondStartPosition = Math.floor(Math.random()*(secondStartPositionMax - secondStartPositionMin + 1) + secondStartPositionMin);
+        secondStartPosition = Math.floor(Math.random()*(secondStartPositionMax - secondStartPositionMin + 1) + secondStartPositionMin);
 
         for (character of secondExpression) {
           let arrayPosition = secondStartPosition + secondExpression.indexOf(character);
           tempPasswordArray[arrayPosition] = character;
         }
-        
-        
-        
+
         break;
     
+      case ((passwordLength >= 11) && (passwordLength <= 16)):
+
+        // Randomly select either 1st expression to be 4 or 5 letter word
+        if (Math.floor(Math.random()*2) == 0) {
+          firstExpression = [...addCaseToWords(selectRandomWord(4))]; //insert filter to pull word from model 
+          secondExpression = [...addCaseToWords(selectRandomWord(5))];
+
+        }
+        else {
+          firstExpression = [...addCaseToWords(selectRandomWord(5))]; //insert filter to pull word from model 
+          secondExpression = [...addCaseToWords(selectRandomWord(4))];
+        }
+
+        firstStartPosition = Math.floor(Math.random()*3);
+
+        for (character of firstExpression) {
+          let arrayPosition = firstStartPosition + firstExpression.indexOf(character); 
+          tempPasswordArray[arrayPosition] = character;
+        }
+
+        secondStartPositionMin = firstStartPosition + firstExpression.length;
+        secondStartPositionMax = passwordLength - secondExpression.length;
+
+        secondStartPosition = Math.floor(Math.random()*(secondStartPositionMax - secondStartPositionMin + 1) + secondStartPositionMin);
+
+        for (character of secondExpression) {
+          let arrayPosition = secondStartPosition + secondExpression.indexOf(character);
+          tempPasswordArray[arrayPosition] = character;
+        }
+
+        break;
+
+      case ((passwordLength >= 7) && (passwordLength <= 10)):
+
+        // Choose random number to decide word length
+        let chooseWordLength = Math.floor(Math.random()*3);
+
+        if (chooseWordLength == 0) {
+          firstExpression = [...addCaseToWords(selectRandomWord(4))]; //insert filter to pull word from model 
+        }
+        else if (chooseWordLength == 1){
+          firstExpression = [...addCaseToWords(selectRandomWord(5))]; //insert filter to pull word from model 
+        }
+        else if (chooseWordLength == 2) {
+          firstExpression = [...addCaseToWords(selectRandomWord(6))];
+        }
+
+        console.log(firstExpression);
+        firstStartPosition = Math.floor(Math.random()*(passwordLength - firstExpression.length));
+
+        for (character of firstExpression) {
+          let arrayPosition = firstStartPosition + firstExpression.indexOf(character); 
+          tempPasswordArray[arrayPosition] = character;
+        }
+            
+        break;
+
+      case ((passwordLength == 6)):
+        firstExpression = [...'Offi']; //insert filter to pull word from model 
+        firstStartPosition = Math.floor(Math.random()*(passwordLength - firstExpression.length + 1));
+
+        // cant use for of loop since there are repeating duplicate elements which breaks indexOf logic
+        for (i=0; i < firstExpression.length; i++) {
+          let arrayPosition = firstStartPosition + i;
+          tempPasswordArray[arrayPosition] = firstExpression[i];
+        }
+
+        break;
+
       default:
         break;
     }
 
+    console.log(tempPasswordArray);
     return tempPasswordArray;
   }
 
@@ -271,7 +366,7 @@ window.addEventListener('DOMContentLoaded', () => {
     setExpressionsOption();
     setButtonState();
   });
-
+  
   generateButton.addEventListener('click', generatePassword);
 
   setCheckboxListeners();
