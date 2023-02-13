@@ -3,6 +3,8 @@ window.addEventListener('DOMContentLoaded', () => {
   const characterLengthDisplay = document.getElementById('settings_character-length-value');
   const slider = document.getElementById('settings_slider');
   const generateButton = document.getElementById('action_button');
+  const copyButton = document.getElementById('password_copy-button');
+  const tooltip = document.getElementById('tooltip');
 
   const uppercaseCheckbox = document.getElementById('uppercase-option');
   const lowercaseCheckbox = document.getElementById('lowercase-option');
@@ -267,9 +269,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
         firstStartPosition = Math.floor(Math.random()*7);
 
-        for (character of firstExpression) {
-          let arrayPosition = firstStartPosition + firstExpression.indexOf(character); 
-          tempPasswordArray[arrayPosition] = character;
+        for (i=0; i < firstExpression.length; i++) {
+          let arrayPosition = firstStartPosition + i;
+          tempPasswordArray[arrayPosition] = firstExpression[i];
         }
 
         secondStartPositionMin = firstStartPosition + firstExpression.length;
@@ -277,9 +279,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
         secondStartPosition = Math.floor(Math.random()*(secondStartPositionMax - secondStartPositionMin + 1) + secondStartPositionMin);
 
-        for (character of secondExpression) {
-          let arrayPosition = secondStartPosition + secondExpression.indexOf(character);
-          tempPasswordArray[arrayPosition] = character;
+        for (i=0; i < secondExpression.length; i++) {
+          let arrayPosition = secondStartPosition + i;
+          tempPasswordArray[arrayPosition] = secondExpression[i];
         }
 
         break;
@@ -299,9 +301,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
         firstStartPosition = Math.floor(Math.random()*3);
 
-        for (character of firstExpression) {
-          let arrayPosition = firstStartPosition + firstExpression.indexOf(character); 
-          tempPasswordArray[arrayPosition] = character;
+        for (i=0; i < firstExpression.length; i++) {
+          let arrayPosition = firstStartPosition + i;
+          tempPasswordArray[arrayPosition] = firstExpression[i];
         }
 
         secondStartPositionMin = firstStartPosition + firstExpression.length;
@@ -309,9 +311,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
         secondStartPosition = Math.floor(Math.random()*(secondStartPositionMax - secondStartPositionMin + 1) + secondStartPositionMin);
 
-        for (character of secondExpression) {
-          let arrayPosition = secondStartPosition + secondExpression.indexOf(character);
-          tempPasswordArray[arrayPosition] = character;
+        for (i=0; i < secondExpression.length; i++) {
+          let arrayPosition = secondStartPosition + i;
+          tempPasswordArray[arrayPosition] = secondExpression[i];
         }
 
         break;
@@ -334,15 +336,15 @@ window.addEventListener('DOMContentLoaded', () => {
         console.log(firstExpression);
         firstStartPosition = Math.floor(Math.random()*(passwordLength - firstExpression.length));
 
-        for (character of firstExpression) {
-          let arrayPosition = firstStartPosition + firstExpression.indexOf(character); 
-          tempPasswordArray[arrayPosition] = character;
+        for (i=0; i < firstExpression.length; i++) {
+          let arrayPosition = firstStartPosition + i;
+          tempPasswordArray[arrayPosition] = firstExpression[i];
         }
             
         break;
 
       case ((passwordLength == 6)):
-        firstExpression = [...'Offi']; //insert filter to pull word from model 
+        firstExpression = [...addCaseToWords(selectRandomWord(4))]; //insert filter to pull word from model 
         firstStartPosition = Math.floor(Math.random()*(passwordLength - firstExpression.length + 1));
 
         // cant use for of loop since there are repeating duplicate elements which breaks indexOf logic
@@ -361,6 +363,38 @@ window.addEventListener('DOMContentLoaded', () => {
     return tempPasswordArray;
   }
 
+    var timeout;
+
+    const tooltipTimeout = (action) => {
+      if (action === 'normal') {
+        timeout = setTimeout(() => {
+          tooltip.classList.remove('active');
+          console.log('test');
+        }, 650);
+      }
+      else if (action === 'clear') {
+        clearTimeout(timeout);
+      }
+    }
+
+  const copyText = async () => {
+    try {
+      await navigator.clipboard.writeText(password.value);
+
+      tooltipTimeout('clear');
+
+      tooltip.classList.remove('active');
+      tooltip.classList.add('active');
+
+      tooltipTimeout('normal');
+
+      console.log(password.value);
+    }
+    catch {
+      console.log('error');
+    }
+  }
+
   slider.addEventListener('input', (event) => {
     characterLengthDisplay.innerText = event.target.value;
     setExpressionsOption();
@@ -368,6 +402,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
   
   generateButton.addEventListener('click', generatePassword);
+  copyButton.addEventListener('click', copyText);
 
   setCheckboxListeners();
   setButtonState();
