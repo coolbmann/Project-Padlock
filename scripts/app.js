@@ -12,6 +12,14 @@ window.addEventListener('DOMContentLoaded', () => {
   const symbolsCheckbox = document.getElementById('symbols-option');
   const regularExpressionsCheckbox = document.getElementById('regular-expressions-option');
 
+  const strengthLabel = document.getElementById('settings_strength-label');
+  const strengthBar1 = document.getElementById('bar-1');
+  const strengthBar2 = document.getElementById('bar-2');
+  const strengthBar3 = document.getElementById('bar-3');
+  const strengthBar4 = document.getElementById('bar-4');
+
+
+
   const setCheckboxListeners = () => {
     const checkboxes = document.querySelectorAll('.settings_checkbox');
 
@@ -67,7 +75,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const setButtonState = () => {
     const selectedOptions = Object.values(checkSelectedOptions()).includes(true);
     
-    if (selectedOptions && slider.value > 0) {
+    if (selectedOptions && Math.round(slider.value/10) > 0) {
       generateButton.className = "action_button_enabled";
       generateButton.disabled = false;
     }
@@ -132,7 +140,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   const generatePassword = () => {
-    const passwordLength = slider.value;
+    const passwordLength = Math.round(slider.value/10);
 
     // Initialise password and possible character arrays
     const randomCharacterArray = setCharacterArray();
@@ -159,6 +167,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // Check if password includes at least one of each selection, else try again
     if (checkPassword(passwordString)) {
       displayPassword(passwordString);
+      checkPasswordStrength(passwordString);
     }
     else {
       generatePassword();
@@ -170,7 +179,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const optionsSelected = Object.values(checkSelectedOptions()).reduce((a, item) => a + item, 0)
     
     // Only apply logic if length is >= number of true options ex.regexp
-    if (optionsSelected > slider.value) {
+    if (optionsSelected > Math.round(slider.value/10)) {
       return true;
     }
     
@@ -209,7 +218,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const selectedOptions = checkSelectedOptions();
 
     if (selectedOptions.uppercase || selectedOptions.lowercase) {
-      if (slider.value >= 6) {
+      if (Math.round(slider.value/10) >= 6) {
         regularExpressionsCheckbox.disabled = false;
       }
       else {
@@ -225,7 +234,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const pushRegularExpressions = () => {
     const selectedOptions = checkSelectedOptions();
-    const passwordLength = parseInt(slider.value);
+    const passwordLength = parseInt(Math.round(slider.value/10));
     const tempPasswordArray = [];
     var firstExpression, secondExpression;
     let firstStartPosition;
@@ -363,19 +372,19 @@ window.addEventListener('DOMContentLoaded', () => {
     return tempPasswordArray;
   }
 
-    var timeout;
+  var timeout;
 
-    const tooltipTimeout = (action) => {
-      if (action === 'normal') {
-        timeout = setTimeout(() => {
-          tooltip.classList.remove('active');
-          console.log('test');
-        }, 650);
-      }
-      else if (action === 'clear') {
-        clearTimeout(timeout);
-      }
+  const tooltipTimeout = (action) => {
+    if (action === 'normal') {
+      timeout = setTimeout(() => {
+        tooltip.classList.remove('active');
+        console.log('test');
+      }, 650);
     }
+    else if (action === 'clear') {
+      clearTimeout(timeout);
+    }
+  }
 
   const copyText = async () => {
     try {
@@ -395,19 +404,106 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  const checkPasswordStrength = (password) => {
+    let strongPassword = RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{14,})');
+    let mediumPassword = RegExp('((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,13})|(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{14,})|(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{14,})|(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{14,})|(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{14,}))');
+    let lowPassword = RegExp('(?=.{6,18})');
+    let weakPassword = RegExp('(?=.{1,5})');
+
+    if (strongPassword.test(password)) {
+      strengthBar1.style.backgroundColor = "#3fc380";
+      strengthBar1.style.borderColor = "#3fc380";
+
+      strengthBar2.style.backgroundColor = "#3fc380";
+      strengthBar2.style.borderColor = "#3fc380";
+
+      strengthBar3.style.backgroundColor = "#3fc380";
+      strengthBar3.style.borderColor = "#3fc380";
+
+      strengthBar4.style.backgroundColor = "#3fc380";
+      strengthBar4.style.borderColor = "#3fc380";
+
+      strengthLabel.textContent = 'STRONG';
+    }
+    else if (mediumPassword.test(password)) {
+      strengthBar1.style.backgroundColor = "#fef160";
+      strengthBar1.style.borderColor = "#fef160";
+
+      strengthBar2.style.backgroundColor = "#fef160";
+      strengthBar2.style.borderColor = "#fef160";
+
+      strengthBar3.style.backgroundColor = "#fef160";
+      strengthBar3.style.borderColor = "#fef160";
+
+      strengthBar4.style.backgroundColor = "#131218";
+      strengthBar4.style.borderColor = "#e2dfdf";
+
+      strengthLabel.textContent = 'MEDIUM';
+    }
+    else if (lowPassword.test(password)) {
+      strengthBar1.style.backgroundColor = "orange";
+      strengthBar1.style.borderColor = "orange";
+
+      strengthBar2.style.backgroundColor = "orange";
+      strengthBar2.style.borderColor = "orange";
+
+      strengthBar3.style.backgroundColor = "#131218";
+      strengthBar3.style.borderColor = "#e2dfdf";
+
+      strengthBar4.style.backgroundColor = "#131218";
+      strengthBar4.style.borderColor = "#e2dfdf";
+
+      strengthLabel.textContent = 'LOW';
+    }
+    else if (weakPassword.test(password)) {
+      strengthBar1.style.backgroundColor = "#d91e18";
+      strengthBar1.style.borderColor = "#d91e18";
+
+      strengthBar2.style.backgroundColor = "#131218";
+      strengthBar2.style.borderColor = "#e2dfdf";
+
+      strengthBar3.style.backgroundColor = "#131218";
+      strengthBar3.style.borderColor = "#e2dfdf";
+
+      strengthBar4.style.backgroundColor = "#131218";
+      strengthBar4.style.borderColor = "#e2dfdf";
+
+      strengthLabel.textContent = 'WEAK';
+    }
+    else {
+      strengthBar1.style.backgroundColor = "#131218";
+      strengthBar1.style.borderColor = "#e2dfdf";
+
+      strengthBar2.style.backgroundColor = "#131218";
+      strengthBar2.style.borderColor = "#e2dfdf";
+
+      strengthBar3.style.backgroundColor = "#131218";
+      strengthBar3.style.borderColor = "#e2dfdf";
+
+      strengthBar4.style.backgroundColor = "#131218";
+      strengthBar4.style.borderColor = "#e2dfdf";
+
+      strengthLabel.textContent = '';
+    }
+  }
+
   slider.addEventListener('input', (event) => {
-    characterLengthDisplay.innerText = event.target.value;
+    characterLengthDisplay.innerText = Math.round(event.target.value/10);
     setExpressionsOption();
     setButtonState();
   });
   
   generateButton.addEventListener('click', generatePassword);
   copyButton.addEventListener('click', copyText);
+  password.addEventListener('input', (event) => {
+    checkPasswordStrength(event.target.value);
+  });
+  
 
   setCheckboxListeners();
   setButtonState();
   setExpressionsOption();
   // Show initial character length value
-  characterLengthDisplay.innerText = slider.value;
+  characterLengthDisplay.innerText = Math.round(slider.value/10);
 
 });
