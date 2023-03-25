@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="styles/password-output.css">
   <link rel="stylesheet" href="styles/password-settings.css">
 
-  <script src="/Project-Padlock/scripts/app.js"></script>
+  <script type="module" src="/scripts/app.js"></script>
 </head>
 <body>
   <h1 id="body_title">Padlock</h1>
@@ -31,6 +31,8 @@
           </svg>
       </button>
     </div>
+    
+    <span id="tooltip">Copied to Clipboard</span>
   </div>
 
   <div id="settings_section-box">
@@ -44,7 +46,7 @@
     </div>
 
     <div id="settings_slider-box">
-      <input id="settings_slider" type="range" min="0" max="18" value="12">
+      <input id="settings_slider" type="range" min="0" max="180" value="120">
     </div>
 
     <div id="settings_checkbox-section">
@@ -78,7 +80,7 @@
 
       <div id="settings_common-expression-row" class="settings_checkbox-section-row settings_text">
         <label>Include Common Expressions
-          <input id="regular-expressions-option" class="settings_checkbox" type="checkbox">
+          <input id="regular-expressions-option" class="settings_checkbox" type="checkbox" disabled="true">
           <span></span>
         </label>
       </div>
@@ -88,17 +90,17 @@
       <div class="settings_text">STRENGTH 
       </div>
       <div>
-        <div id="settings_strength-label">MEDIUM</div>
-        <svg>
+        <div id="settings_strength-label"></div>
+        <svg class="settings_strength-bar" id="bar-1">
           <rect x="66.5" y="0.5" width="1rem" height="1.5rem"/>
         </svg>
-        <svg>
+        <svg class="settings_strength-bar" id="bar-2">
           <rect x="66.5" y="0.5" width="1rem" height="1.5rem"/>
         </svg>
-        <svg>
+        <svg class="settings_strength-bar" id="bar-3">
           <rect x="66.5" y="0.5" width="1rem" height="1.5rem"/>
         </svg>
-        <svg>
+        <svg class="settings_strength-bar" id="bar-4">
           <rect x="66.5" y="0.5" width="1rem" height="1.5rem"/>
         </svg>
       </div>
